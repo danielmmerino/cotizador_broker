@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'formulario_cotizador_salud.dart';
+
+
 class CotizadorSaludPage extends StatefulWidget {
   const CotizadorSaludPage({super.key});
 
@@ -58,6 +61,22 @@ class _CotizadorSaludPageState extends State<CotizadorSaludPage> {
                   },
                 ),
               ),
+
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => FormularioCotizadorSaludPage(
+                        orderedAspects: List<String>.from(_aspects),
+                      ),
+                    ),
+                  );
+                },
+                child: const Text('Cotizar'),
+              ),
+
             ],
           ),
         ),
