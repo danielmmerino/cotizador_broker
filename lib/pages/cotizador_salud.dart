@@ -19,11 +19,11 @@ class _CotizadorSaludPageState extends State<CotizadorSaludPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Cotizador de Salud'),
-      ),
-      body: SafeArea(
-        child: Align(
+        appBar: AppBar(
+          title: const Text('Cotizador de Salud'),
+        ),
+        body: SafeArea(
+            child: Align(
           alignment: Alignment.topCenter,
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 600),
@@ -32,56 +32,56 @@ class _CotizadorSaludPageState extends State<CotizadorSaludPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-              const Text(
-                'Ordena los aspectos m\u00e1s importantes al cotizar:',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-              ),
-              const SizedBox(height: 20),
-              Expanded(
-                child: ReorderableListView.builder(
-                  itemCount: _aspects.length,
-                  onReorder: (oldIndex, newIndex) {
-                    setState(() {
-                      if (newIndex > oldIndex) {
-                        newIndex -= 1;
-                      }
-                      final item = _aspects.removeAt(oldIndex);
-                      _aspects.insert(newIndex, item);
-                    });
-                  },
-                  itemBuilder: (context, index) {
-                    final aspect = _aspects[index];
-                    return Card(
-                      key: ValueKey(aspect),
-                      child: ListTile(
-                        leading: CircleAvatar(
-                          child: Text('${index + 1}'),
-                        ),
-                        title: Text(aspect),
-                        trailing: const Icon(Icons.drag_handle),
-                      ),
-                    );
-                  },
-                ),
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => FormularioCotizadorSaludPage(
-                        orderedAspects: List<String>.from(_aspects),
-                      ),
+                  const Text(
+                    'Ordena los aspectos más importantes para ti al momento de seleccionar un seguro:',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                  ),
+                  const SizedBox(height: 20),
+                  Expanded(
+                    child: ReorderableListView.builder(
+                      itemCount: _aspects.length,
+                      onReorder: (oldIndex, newIndex) {
+                        setState(() {
+                          if (newIndex > oldIndex) {
+                            newIndex -= 1;
+                          }
+                          final item = _aspects.removeAt(oldIndex);
+                          _aspects.insert(newIndex, item);
+                        });
+                      },
+                      itemBuilder: (context, index) {
+                        final aspect = _aspects[index];
+                        return Card(
+                          key: ValueKey(aspect),
+                          child: ListTile(
+                            leading: CircleAvatar(
+                              child: Text('${index + 1}'),
+                            ),
+                            title: Text(aspect),
+                            trailing: const Icon(Icons.drag_handle),
+                          ),
+                        );
+                      },
                     ),
-                  );
-                },
-                child: const Text('Cotizar'),
+                  ),
+                  const SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => FormularioCotizadorSaludPage(
+                            orderedAspects: List<String>.from(_aspects),
+                          ),
+                        ),
+                      );
+                    },
+                    child: const Text('Cotizar'),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
-      ),
-    );
+        )));
   }
 }
