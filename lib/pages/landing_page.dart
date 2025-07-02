@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'cotizador_salud.dart';
+import '../widgets/whatsapp_button.dart';
 
 class LandingPage extends StatelessWidget {
   const LandingPage({super.key});
@@ -8,6 +9,7 @@ class LandingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[100],
+      floatingActionButton: const WhatsappButton(),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
