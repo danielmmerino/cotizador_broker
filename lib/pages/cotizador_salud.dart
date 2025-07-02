@@ -39,7 +39,6 @@ class _CotizadorSaludPageState extends State<CotizadorSaludPage> {
                   const SizedBox(height: 20),
                   Expanded(
                     child: ReorderableListView.builder(
-                      buildDefaultDragHandles: false,
                       itemCount: _aspects.length,
                       onReorder: (oldIndex, newIndex) {
                         setState(() {
@@ -52,17 +51,14 @@ class _CotizadorSaludPageState extends State<CotizadorSaludPage> {
                       },
                       itemBuilder: (context, index) {
                         final aspect = _aspects[index];
-                        return ReorderableDelayedDragStartListener(
+                        return Card(
                           key: ValueKey(aspect),
-                          index: index,
-                          child: Card(
-                            child: ListTile(
-                              leading: CircleAvatar(
-                                child: Text('${index + 1}'),
-                              ),
-                              title: Text(aspect),
-                              trailing: const Icon(Icons.drag_handle),
+                          child: ListTile(
+                            leading: CircleAvatar(
+                              child: Text('${index + 1}'),
                             ),
+                            title: Text(aspect),
+                            trailing: const Icon(Icons.drag_handle),
                           ),
                         );
                       },
