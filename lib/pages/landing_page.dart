@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'cotizador_salud.dart';
+import 'preferencias_cotizador_auto.dart';
 import '../widgets/whatsapp_button.dart';
 
 class LandingPage extends StatelessWidget {
@@ -40,7 +41,12 @@ class LandingPage extends StatelessWidget {
                     title: 'Seguro de Auto',
                     imagePath: 'assets/images/car.png',
                     onPressed: () {
-                      // Navegar a cotización de auto
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const PreferenciasCotizadorAutoPage(),
+                        ),
+                      );
                     },
                   ),
                   _InsuranceCard(
