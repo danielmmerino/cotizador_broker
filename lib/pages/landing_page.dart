@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'cotizador_salud.dart';
 
 class LandingPage extends StatelessWidget {
   const LandingPage({super.key});
@@ -44,7 +45,12 @@ class LandingPage extends StatelessWidget {
                     title: 'Seguro de Salud',
                     imagePath: 'assets/images/health.png',
                     onPressed: () {
-                      // Navegar a cotización de salud
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const CotizadorSaludPage(),
+                        ),
+                      );
                     },
                   ),
                 ],
