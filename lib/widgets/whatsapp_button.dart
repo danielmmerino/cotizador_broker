@@ -19,7 +19,7 @@ class WhatsappButton extends StatelessWidget {
     return FloatingActionButton(
       onPressed: _openWhatsapp,
       backgroundColor: Colors.green,
-      child: const Icon(Icons.whatsapp),
+      child: const Icon(Icons.chat),
     );
   }
 }
