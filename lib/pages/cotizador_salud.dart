@@ -24,11 +24,15 @@ class _CotizadorSaludPageState extends State<CotizadorSaludPage> {
         title: const Text('Cotizador de Salud'),
       ),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
+        child: Align(
+          alignment: Alignment.topCenter,
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 600),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
               const Text(
                 'Ordena los aspectos m\u00e1s importantes al cotizar:',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
