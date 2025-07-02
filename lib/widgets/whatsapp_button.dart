@@ -14,10 +14,48 @@ class WhatsappButton extends StatelessWidget {
     }
   }
 
+  void _showChatDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: const [
+                Icon(Icons.chat_bubble, color: Colors.green),
+                SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    'Contactanos por whatsapp para solventar cualquier duda',
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            Align(
+              alignment: Alignment.centerRight,
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  _openWhatsapp();
+                },
+                child: const Text('Continuar'),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
-      onPressed: _openWhatsapp,
+      onPressed: () => _showChatDialog(context),
       backgroundColor: Colors.green,
       child: const Icon(Icons.chat),
     );
