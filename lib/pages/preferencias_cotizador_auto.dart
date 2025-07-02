@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
+import '../models/vehicle_info.dart';
 import '../services/vehicle_info_service.dart';
 import '../widgets/whatsapp_button.dart';
 
@@ -17,7 +20,7 @@ class _PreferenciasCotizadorAutoPageState
   final _plateController = TextEditingController();
   final _service = VehicleInfoService();
 
-  String? _result;
+  VehicleInfo? _info;
   bool _loading = false;
 
   @override
@@ -31,16 +34,16 @@ class _PreferenciasCotizadorAutoPageState
 
     setState(() {
       _loading = true;
-      _result = null;
+      _info = null;
     });
     try {
       final response = await _service.fetchVehicleInfo(_plateController.text);
       setState(() {
-        _result = response;
+        _info = response;
       });
     } catch (e) {
       setState(() {
-        _result = 'Error al consultar: $e';
+        _info = null;
       });
     } finally {
       setState(() {
@@ -88,10 +91,12 @@ class _PreferenciasCotizadorAutoPageState
                           : const Text('Consultar'),
                     ),
                     const SizedBox(height: 16),
-                    if (_result != null)
+                    if (_info != null)
                       Expanded(
                         child: SingleChildScrollView(
-                          child: Text(_result!),
+                          child: Text(
+                            JsonEncoder.withIndent('  ').convert(_info!.toJson()),
+                          ),
                         ),
                       ),
                   ],

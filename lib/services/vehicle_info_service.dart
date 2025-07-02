@@ -1,4 +1,8 @@
+import 'dart:convert';
+
 import 'package:http/http.dart' as http;
+
+import '../models/vehicle_info.dart';
 
 class VehicleInfoService {
   /// Obtiene información del vehículo consultando la web de Ecuador Legal.
@@ -6,7 +10,7 @@ class VehicleInfoService {
   /// Se agregan algunas cabeceras para replicar la petición que realiza el
   /// aplicativo web original, ya que sin ellas el servidor puede responder de
   /// forma inesperada.
-  Future<String> fetchVehicleInfo(String plate) async {
+  Future<VehicleInfo> fetchVehicleInfo(String plate) async {
     final url = Uri.parse(
       'https://www.ecuadorlegalonline.com/modulo/sri/matriculacion/consultar-vehiculo-rubros.php?placa=$plate',
     );
@@ -23,9 +27,9 @@ class VehicleInfoService {
     });
 
     if (response.statusCode == 200) {
-      return response.body;
-    } else {
-      throw Exception('Error al obtener información del vehículo');
+      final Map<String, dynamic> data = json.decode(response.body);
+      return VehicleInfo.fromJson(data);
     }
+    throw Exception('Error al obtener información del vehículo');
   }
 }
