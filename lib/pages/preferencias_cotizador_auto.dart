@@ -17,7 +17,7 @@ class PreferenciasCotizadorAutoPage extends StatefulWidget {
 class _PreferenciasCotizadorAutoPageState
     extends State<PreferenciasCotizadorAutoPage> {
   final _formKey = GlobalKey<FormState>();
-  final _plateController = TextEditingController();
+  final _plateController = TextEditingController(text: 'PFH1781');
   final _service = VehicleInfoService();
 
   VehicleInfo? _info;
