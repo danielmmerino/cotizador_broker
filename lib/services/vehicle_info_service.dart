@@ -11,7 +11,6 @@ class VehicleInfoService {
   Future<VehicleInfo> fetchVehicleInfo(String plate) async {
     final baseUrl = dotenv.env['API_BASE_URL'] ?? 'http://127.0.0.1:8000';
     final url = Uri.parse('$baseUrl/api/vehicle-info/$plate');
-    final login = await AuthService().login();
     final token = await AuthService().getToken();
     final headers = token != null
         ? <String, String>{
