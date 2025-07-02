@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'formulario_cotizador_salud.dart';
+import '../widgets/whatsapp_button.dart';
 
 class CotizadorSaludPage extends StatefulWidget {
   const CotizadorSaludPage({super.key});
@@ -19,6 +20,7 @@ class _CotizadorSaludPageState extends State<CotizadorSaludPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        floatingActionButton: const WhatsappButton(),
         appBar: AppBar(
           title: const Text('Cotizador de Salud'),
         ),
@@ -58,7 +60,7 @@ class _CotizadorSaludPageState extends State<CotizadorSaludPage> {
                               child: Text('${index + 1}'),
                             ),
                             title: Text(aspect),
-                            trailing: const Icon(Icons.drag_handle),
+                            //trailing: const Icon(Icons.drag_handle),
                           ),
                         );
                       },

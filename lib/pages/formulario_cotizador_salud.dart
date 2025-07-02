@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../widgets/whatsapp_button.dart';
 
 class FormularioCotizadorSaludPage extends StatefulWidget {
   final List<String> orderedAspects;
@@ -101,6 +102,7 @@ class _FormularioCotizadorSaludPageState
       appBar: AppBar(
         title: const Text('Formulario Cotizador Salud'),
       ),
+      floatingActionButton: const WhatsappButton(),
       body: SafeArea(
         child: Align(
           alignment: Alignment.topCenter,
