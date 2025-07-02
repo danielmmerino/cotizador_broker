@@ -15,7 +15,7 @@ class AuthService {
     }
 
     final url = Uri.parse('$baseUrl/api/login');
-    final response = await http.post(url, body: {'secret_key': secretKey});
+    final response = await http.post(url, headers: {'x-api-key': secretKey});
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = json.decode(response.body);
