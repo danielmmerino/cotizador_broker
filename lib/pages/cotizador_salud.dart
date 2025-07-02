@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'formulario_cotizador_salud.dart';
 
-
 class CotizadorSaludPage extends StatefulWidget {
   const CotizadorSaludPage({super.key});
 
@@ -12,9 +11,9 @@ class CotizadorSaludPage extends StatefulWidget {
 
 class _CotizadorSaludPageState extends State<CotizadorSaludPage> {
   final List<String> _aspects = [
-    'Precio',
-    'Monto de cobertura',
+    'Monto de cobertura - Suma asegurada',
     'Red de hospitales donde atenderme',
+    'Precio que pagaré por el servicio',
   ];
 
   @override
@@ -61,7 +60,6 @@ class _CotizadorSaludPageState extends State<CotizadorSaludPage> {
                   },
                 ),
               ),
-
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
@@ -76,7 +74,6 @@ class _CotizadorSaludPageState extends State<CotizadorSaludPage> {
                 },
                 child: const Text('Cotizar'),
               ),
-
             ],
           ),
         ),
