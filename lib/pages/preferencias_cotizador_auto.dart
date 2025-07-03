@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../models/vehicle_info.dart';
 import '../services/vehicle_info_service.dart';
 import '../widgets/whatsapp_button.dart';
+import 'cotizador_auto.dart';
 
 class PreferenciasCotizadorAutoPage extends StatefulWidget {
   const PreferenciasCotizadorAutoPage({super.key});
@@ -83,7 +84,8 @@ class _PreferenciasCotizadorAutoPageState
                     ),
                     const SizedBox(height: 16),
                     ElevatedButton(
-                      onPressed: _loading ? null : _consultar,
+                      onPressed:
+                          _loading || _info != null ? null : _consultar,
                       child: _loading
                           ? const SizedBox(
                               width: 20,
@@ -93,14 +95,15 @@ class _PreferenciasCotizadorAutoPageState
                           : const Text('Consultar'),
                     ),
                     const SizedBox(height: 16),
-                    if (_info != null)
+                    if (_info != null) ...[
                       Expanded(
                         child: SingleChildScrollView(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'El vehiculo de marca ${_info!.vehiculo?.descripcionMarca ?? ''}, modelo: ${_info!.vehiculo?.descripcionModelo ?? ''} del año : ${_info!.vehiculo?.anioAuto ?? ''}',
+                             'El vehículo de marca ${_info!.vehiculo?.descripcionMarca ?? ''}, modelo: ${_info!.vehiculo?.descripcionModelo ?? ''} del año ${_info!.vehiculo?.anioAuto ?? ''}',
+
                               ),
                               const SizedBox(height: 16),
                               Text(
@@ -120,6 +123,19 @@ class _PreferenciasCotizadorAutoPageState
                           ),
                         ),
                       ),
+                      const SizedBox(height: 16),
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const CotizadorAutoPage(),
+                            ),
+                          );
+                        },
+                        child: const Text('Cotizar'),
+                      ),
+                    ],
                   ],
                 ),
               ),
