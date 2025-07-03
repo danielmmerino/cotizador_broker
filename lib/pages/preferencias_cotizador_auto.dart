@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../models/vehicle_info.dart';
 import '../services/vehicle_info_service.dart';
 import '../widgets/whatsapp_button.dart';
+import 'cotizador_auto.dart';
 
 class PreferenciasCotizadorAutoPage extends StatefulWidget {
   const PreferenciasCotizadorAutoPage({super.key});
@@ -17,7 +18,8 @@ class PreferenciasCotizadorAutoPage extends StatefulWidget {
 class _PreferenciasCotizadorAutoPageState
     extends State<PreferenciasCotizadorAutoPage> {
   final _formKey = GlobalKey<FormState>();
-  final _plateController = TextEditingController();
+  final _plateController = TextEditingController(text: 'PFH1781');
+  final _valorComercialController = TextEditingController(text: '15000');
   final _service = VehicleInfoService();
 
   VehicleInfo? _info;
@@ -26,6 +28,7 @@ class _PreferenciasCotizadorAutoPageState
   @override
   void dispose() {
     _plateController.dispose();
+    _valorComercialController.dispose();
     super.dispose();
   }
 
@@ -81,7 +84,8 @@ class _PreferenciasCotizadorAutoPageState
                     ),
                     const SizedBox(height: 16),
                     ElevatedButton(
-                      onPressed: _loading ? null : _consultar,
+                      onPressed:
+                          _loading || _info != null ? null : _consultar,
                       child: _loading
                           ? const SizedBox(
                               width: 20,
@@ -91,14 +95,47 @@ class _PreferenciasCotizadorAutoPageState
                           : const Text('Consultar'),
                     ),
                     const SizedBox(height: 16),
-                    if (_info != null)
+                    if (_info != null) ...[
                       Expanded(
                         child: SingleChildScrollView(
-                          child: Text(
-                            JsonEncoder.withIndent('  ').convert(_info!.toJson()),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                             'El vehículo de marca ${_info!.vehiculo?.descripcionMarca ?? ''}, modelo: ${_info!.vehiculo?.descripcionModelo ?? ''} del año ${_info!.vehiculo?.anioAuto ?? ''}',
+
+                              ),
+                              const SizedBox(height: 16),
+                              Text(
+                                'Valor comercial sugerido a la fecha ${_valorComercialController.text} dólares',
+                              ),
+                              const SizedBox(height: 8),
+                              TextFormField(
+                                controller: _valorComercialController,
+                                decoration: const InputDecoration(
+                                  labelText: 'Modificar valor comercial',
+                                  suffixText: 'dólares',
+                                ),
+                                keyboardType: TextInputType.number,
+                                onChanged: (_) => setState(() {}),
+                              ),
+                            ],
                           ),
                         ),
                       ),
+                      const SizedBox(height: 16),
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const CotizadorAutoPage(),
+                            ),
+                          );
+                        },
+                        child: const Text('Cotizar'),
+                      ),
+                    ],
                   ],
                 ),
               ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'cotizador_salud.dart';
 import 'preferencias_cotizador_auto.dart';
 import '../widgets/whatsapp_button.dart';
+import '../services/auth_service.dart';
 
 class LandingPage extends StatelessWidget {
   const LandingPage({super.key});
