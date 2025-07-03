@@ -102,7 +102,8 @@ class _PreferenciasCotizadorAutoPageState
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'El vehículo de marca ${_info!.vehiculo?.descripcionMarca ?? ''}, modelo: ${_info!.vehiculo?.descripcionModelo ?? ''} del año ${_info!.vehiculo?.anioAuto ?? ''}',
+                             'El vehículo de marca ${_info!.vehiculo?.descripcionMarca ?? ''}, modelo: ${_info!.vehiculo?.descripcionModelo ?? ''} del año ${_info!.vehiculo?.anioAuto ?? ''}',
+
                               ),
                               const SizedBox(height: 16),
                               Text(
