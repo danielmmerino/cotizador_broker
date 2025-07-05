@@ -63,6 +63,7 @@ class _CotizadorSaludPageState extends State<CotizadorSaludPage> {
                                 child: Text('${index + 1}'),
                               ),
                               title: Text(aspect),
+                              trailing: const Icon(Icons.open_with_outlined),
                             ),
                           ),
                         );
