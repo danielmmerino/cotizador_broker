@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import '../widgets/whatsapp_button.dart';
+import '../models/preference_option.dart';
+import '../services/cotizar_salud_service.dart';
+import '../models/salud_quote.dart';
 
 class FormularioCotizadorSaludPage extends StatefulWidget {
-  final List<String> orderedAspects;
+  final List<PreferenceOption> orderedAspects;
 
   const FormularioCotizadorSaludPage({
     super.key,
@@ -17,6 +20,10 @@ class FormularioCotizadorSaludPage extends StatefulWidget {
 class _FormularioCotizadorSaludPageState
     extends State<FormularioCotizadorSaludPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  final _cotizarService = CotizarSaludService();
+  List<SaludQuote> _quotes = [];
+  bool _loadingQuotes = false;
 
   String? _gender;
   DateTime? _birthDate;
@@ -89,13 +96,42 @@ class _FormularioCotizadorSaludPageState
     return null;
   }
 
+  Future<void> _cotizar() async {
+    if (!_formKey.currentState!.validate() || _age == null || _gender == null) {
+      return;
+    }
+    setState(() {
+      _loadingQuotes = true;
+      _quotes = [];
+    });
+    try {
+      final quotes = await _cotizarService.cotizar(
+        preferencias: widget.orderedAspects,
+        edad: _age!,
+        genero: _gender!,
+      );
+      quotes.sort((a, b) => int.parse(a.orden).compareTo(int.parse(b.orden)));
+      setState(() {
+        _quotes = quotes;
+      });
+    } catch (_) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Error al cotizar')),
+      );
+    } finally {
+      setState(() {
+        _loadingQuotes = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final option1 = widget.orderedAspects.isNotEmpty
-        ? widget.orderedAspects[0]
+        ? widget.orderedAspects[0].descripcion
         : '';
     final option2 = widget.orderedAspects.length > 1
-        ? widget.orderedAspects[1]
+        ? widget.orderedAspects[1].descripcion
         : '';
 
     return Scaffold(
@@ -192,15 +228,20 @@ class _FormularioCotizadorSaludPageState
                         ),
                         const SizedBox(height: 24),
                         ElevatedButton(
-                          onPressed: () {
-                            if (_formKey.currentState!.validate()) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('Formulario válido')),
-                              );
-                            }
-                          },
-                          child: const Text('Enviar'),
+                          onPressed: _loadingQuotes ? null : _cotizar,
+                          child: const Text('Cotizar'),
                         ),
+                        if (_loadingQuotes)
+                          const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 16),
+                            child: Center(child: CircularProgressIndicator()),
+                          ),
+                        if (_quotes.isNotEmpty)
+                          Column(
+                            children: _quotes
+                                .map((q) => _QuoteCard(quote: q))
+                                .toList(),
+                          ),
                       ],
                     ],
                   ),
@@ -208,6 +249,42 @@ class _FormularioCotizadorSaludPageState
               ),
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class _QuoteCard extends StatelessWidget {
+  final SaludQuote quote;
+
+  const _QuoteCard({required this.quote});
+
+  @override
+  Widget build(BuildContext context) {
+    final rating = int.tryParse(quote.puntuacion) ?? 0;
+    return Card(
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      child: ListTile(
+        leading: const Icon(Icons.business),
+        title: Text(quote.nombreAseguradora,
+            style: const TextStyle(fontWeight: FontWeight.bold)),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(quote.nombreProducto),
+            Text('Valor: ${quote.valor}'),
+            Row(
+              children: List.generate(
+                5,
+                (index) => Icon(
+                  index < rating ? Icons.star : Icons.star_border,
+                  color: Colors.amber,
+                  size: 16,
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
