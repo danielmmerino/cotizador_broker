@@ -14,7 +14,7 @@ class CotizadorSaludPage extends StatefulWidget {
 
 class _CotizadorSaludPageState extends State<CotizadorSaludPage> {
   final _service = PreferenciasSaludService();
-  List<String> _aspects = [];
+  List<PreferenceOption> _options = [];
   bool _loading = true;
 
   @override
@@ -27,11 +27,11 @@ class _CotizadorSaludPageState extends State<CotizadorSaludPage> {
     try {
       final options = await _service.fetchOptions();
       setState(() {
-        _aspects = options.map((e) => e.descripcion).toList();
+        _options = options;
       });
     } catch (_) {
       setState(() {
-        _aspects = [];
+        _options = [];
       });
     } finally {
       setState(() {
@@ -68,27 +68,27 @@ class _CotizadorSaludPageState extends State<CotizadorSaludPage> {
                         Expanded(
                           child: ReorderableListView.builder(
                             buildDefaultDragHandles: false,
-                            itemCount: _aspects.length,
+                            itemCount: _options.length,
                             onReorder: (oldIndex, newIndex) {
                               setState(() {
                                 if (newIndex > oldIndex) {
                                   newIndex -= 1;
                                 }
-                                final item = _aspects.removeAt(oldIndex);
-                                _aspects.insert(newIndex, item);
+                                final item = _options.removeAt(oldIndex);
+                                _options.insert(newIndex, item);
                               });
                             },
                             itemBuilder: (context, index) {
-                              final aspect = _aspects[index];
+                              final aspect = _options[index];
                               return ReorderableDragStartListener(
-                                key: ValueKey(aspect),
+                                key: ValueKey(aspect.id),
                                 index: index,
                                 child: Card(
                                   child: ListTile(
                                     leading: CircleAvatar(
                                       child: Text('${index + 1}'),
                                     ),
-                                    title: Text(aspect),
+                                    title: Text(aspect.descripcion),
                                     trailing:
                                         const Icon(Icons.open_with_outlined),
                                   ),
@@ -99,7 +99,7 @@ class _CotizadorSaludPageState extends State<CotizadorSaludPage> {
                         ),
                         const SizedBox(height: 20),
                         ElevatedButton(
-                          onPressed: _aspects.isEmpty
+                          onPressed: _options.isEmpty
                               ? null
                               : () {
                                   Navigator.push(
@@ -108,7 +108,7 @@ class _CotizadorSaludPageState extends State<CotizadorSaludPage> {
                                       builder: (_) =>
                                           FormularioCotizadorSaludPage(
                                         orderedAspects:
-                                            List<String>.from(_aspects),
+                                            List<PreferenceOption>.from(_options),
                                       ),
                                     ),
                                   );
