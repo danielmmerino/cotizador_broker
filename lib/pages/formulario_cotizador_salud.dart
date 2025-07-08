@@ -3,6 +3,7 @@ import '../widgets/whatsapp_button.dart';
 import '../models/preference_option.dart';
 import '../services/cotizar_salud_service.dart';
 import '../models/salud_quote.dart';
+import 'resultado_cotizar.dart';
 
 class FormularioCotizadorSaludPage extends StatefulWidget {
   final List<PreferenceOption> orderedAspects;
@@ -22,7 +23,6 @@ class _FormularioCotizadorSaludPageState
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   final _cotizarService = CotizarSaludService();
-  List<SaludQuote> _quotes = [];
   bool _loadingQuotes = false;
 
   String? _gender;
@@ -102,7 +102,6 @@ class _FormularioCotizadorSaludPageState
     }
     setState(() {
       _loadingQuotes = true;
-      _quotes = [];
     });
     try {
       final quotes = await _cotizarService.cotizar(
@@ -111,9 +110,14 @@ class _FormularioCotizadorSaludPageState
         genero: _gender!,
       );
       quotes.sort((a, b) => int.parse(a.orden).compareTo(int.parse(b.orden)));
-      setState(() {
-        _quotes = quotes;
-      });
+      if (mounted) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => ResultadoCotizarPage(quotes: quotes),
+          ),
+        );
+      }
     } catch (_) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Error al cotizar')),
@@ -236,12 +240,6 @@ class _FormularioCotizadorSaludPageState
                             padding: EdgeInsets.symmetric(vertical: 16),
                             child: Center(child: CircularProgressIndicator()),
                           ),
-                        if (_quotes.isNotEmpty)
-                          Column(
-                            children: _quotes
-                                .map((q) => _QuoteCard(quote: q))
-                                .toList(),
-                          ),
                       ],
                     ],
                   ),
@@ -255,39 +253,4 @@ class _FormularioCotizadorSaludPageState
   }
 }
 
-class _QuoteCard extends StatelessWidget {
-  final SaludQuote quote;
-
-  const _QuoteCard({required this.quote});
-
-  @override
-  Widget build(BuildContext context) {
-    final rating = int.tryParse(quote.puntuacion) ?? 0;
-    return Card(
-      margin: const EdgeInsets.symmetric(vertical: 8),
-      child: ListTile(
-        leading: const Icon(Icons.business),
-        title: Text(quote.nombreAseguradora,
-            style: const TextStyle(fontWeight: FontWeight.bold)),
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(quote.nombreProducto),
-            Text('Valor: ${quote.valor}'),
-            Row(
-              children: List.generate(
-                5,
-                (index) => Icon(
-                  index < rating ? Icons.star : Icons.star_border,
-                  color: Colors.amber,
-                  size: 16,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
 
