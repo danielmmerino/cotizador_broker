@@ -19,10 +19,11 @@ class _PreferenciasCotizadorAutoPageState
     extends State<PreferenciasCotizadorAutoPage> {
   final _formKey = GlobalKey<FormState>();
   final _plateController = TextEditingController(text: 'PFH1781');
-  final _valorComercialController = TextEditingController(text: '15000');
+  final _valorComercialController = TextEditingController(text: '0');
   final _service = VehicleInfoService();
 
   VehicleInfo? _info;
+  OpcionComercial? _selectedOpcion;
   bool _loading = false;
 
   @override
@@ -43,6 +44,12 @@ class _PreferenciasCotizadorAutoPageState
       final response = await _service.fetchVehicleInfo(_plateController.text);
       setState(() {
         _info = response;
+        final opciones = _info?.vehiculo?.opcionesComerciales;
+        if (opciones != null && opciones.isNotEmpty) {
+          _selectedOpcion = opciones.first;
+          _valorComercialController.text =
+              opciones.first.precioComercial?.trim() ?? '';
+        }
       });
     } catch (e) {
       setState(() {
@@ -102,10 +109,32 @@ class _PreferenciasCotizadorAutoPageState
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                             'El vehículo de marca ${_info!.vehiculo?.descripcionMarca ?? ''}, modelo: ${_info!.vehiculo?.descripcionModelo ?? ''} del año ${_info!.vehiculo?.anioAuto ?? ''}',
-
+                                'El vehículo de marca ${_info!.vehiculo?.descripcionMarca ?? ''}, modelo: ${_info!.vehiculo?.descripcionModelo ?? ''} del año ${_info!.vehiculo?.anioAuto ?? ''}',
                               ),
                               const SizedBox(height: 16),
+                              if ((_info!.vehiculo?.opcionesComerciales?.length ?? 0) > 1)
+                                DropdownButtonFormField<OpcionComercial>(
+                                  value: _selectedOpcion,
+                                  decoration: const InputDecoration(labelText: 'Modelo'),
+                                  items: _info!.vehiculo!.opcionesComerciales!
+                                      .map(
+                                        (e) => DropdownMenuItem(
+                                          value: e,
+                                          child: Text('${e.modelo} - ${e.precioComercial}'),
+                                        ),
+                                      )
+                                      .toList(),
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _selectedOpcion = value;
+                                      if (value != null) {
+                                        _valorComercialController.text = value.precioComercial?.trim() ?? '';
+                                      }
+                                    });
+                                  },
+                                ),
+                              if ((_info!.vehiculo?.opcionesComerciales?.length ?? 0) > 1)
+                                const SizedBox(height: 16),
                               Text(
                                 'Valor comercial sugerido a la fecha ${_valorComercialController.text} dólares',
                               ),
