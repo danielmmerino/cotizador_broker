@@ -10,7 +10,7 @@ class VehicleInfoService {
   /// Obtiene información del vehículo consultando el backend configurado.
   Future<VehicleInfo> fetchVehicleInfo(String plate) async {
     final baseUrl = dotenv.env['API_BASE_URL'] ?? 'http://127.0.0.1:8000';
-    final url = Uri.parse('$baseUrl/api/vehicle-info/$plate');
+    final url = Uri.parse('$baseUrl/api/info_placa/$plate');
     final token = await AuthService().getToken();
     final headers = token != null
         ? <String, String>{
